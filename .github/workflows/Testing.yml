@@ -1,0 +1,46 @@
+name: Testing
+
+on:
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - '*'
+  pull_request:
+
+jobs:
+  windows-testing:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.8' 
+      
+      - name: Install dependencies
+        run: |
+          choco install --yes swig
+      - name: Build
+        run: |
+          make all PYENV=C:\hostedtoolcache\windows\Python\3.8.10\x64
+      - name: Run Tests
+        run: |
+          make all PYENV=C:\hostedtoolcache\windows\Python\3.8.10\x64
+          python -c "from pwnlib.tubes import process; process.send()"
+      - name: Clean 
+        run: make clean
+        
+  ubuntu-testing:
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install swig
+        run: |
+          sudo apt install --yes swig
+      - name: Build
+        run: echo "hello world"
