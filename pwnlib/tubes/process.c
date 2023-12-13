@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include "process.h"
 
+Process proc;
+
 void process (char *command) {
 	/**
 	 * @brief open a file.

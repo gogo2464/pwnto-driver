@@ -5,4 +5,4 @@ all:
 	$(MAKE) -C tubes
  
 clean:
-	$(MAKE) -C  tubes clean
+	$(MAKE) -C tubes clean

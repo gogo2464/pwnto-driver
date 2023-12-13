@@ -15,17 +15,22 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Install swig
+      
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.8' 
+      
+      - name: Install dependencies
         run: |
-          choco install python --version=3.8.0
           choco install --yes swig
       - name: Build
-        run: make all
+        run: |
+          make all PYENV=C:\hostedtoolcache\windows\Python\3.8.10\x64
       - name: Run Tests
         run: |
-          make all ;
+          make all PYENV=C:\hostedtoolcache\windows\Python\3.8.10\x64
           python -c "from pwnlib.tubes import process; process.send()"
-      - name: Clean
+      - name: Clean 
         run: make clean
         
   ubuntu-testing:
