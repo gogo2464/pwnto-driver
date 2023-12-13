@@ -17,12 +17,10 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install swig
         run: |
-          choco install --yes python
+          choco install python --version=3.8.0
           choco install --yes swig
       - name: Build
-        run: |
-        python --version 
-        make all
+        run: make all
       - name: Run Tests
         run: |
           make all ;

@@ -7,4 +7,4 @@ all:
 	$(MAKE) -C pwnlib
  
 clean:
-    $(MAKE) -C  pwnlib clean
+	$(MAKE) -C  pwnlib clean

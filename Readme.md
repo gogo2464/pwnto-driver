@@ -8,9 +8,30 @@ As the dev have some experience with the old pwntools, the new tool aims to fix 
  - windows program and drivers support. More than pwntools.
  - Linux driver support (more than pwn++ that is written in C++ instead of C).
  
-# I.1 Build
+# I Build
 
-# I.1 Install dependencies
+# I.1 Install building dependencies
+
+```
+choco install --yes swig
+```
+
+# I.2 Build/Clean project
+
+build with
+
+```shell
+make all
+```
+clean with
+
+```shell
+make clean
+```
+
+# II Contributing
+
+# Install dev dependencies
 
 ```shell
 choco install --yes doxygen.install
@@ -18,11 +39,17 @@ choco install --yes doxygen.portable
 choco install --yes swig
 ```
 
-# I.2 Build really
+# II.1 Bindings with swig
 
-```shell
-make all
-```
+Each set of .h/.c of file you create MUST be followed by another .i file with the same name containing swig binding definition.
+
+It will then autogenerate binding so that our c program with c perf and c syntax will be available by importation in most of the languages including python.
+
+Watch the swig doc for more informations.
+
+# II.2 Documentating with doxygen
+
+# II.3 Testing with integrated doxygen doctest
 
 # alternatives:
 
