@@ -23,10 +23,31 @@ jobs:
       - name: Install dependencies
         run: |
           choco install --yes swig
+          choco install --yes doxygen.install
+          choco install --yes doxygen.portable
+          choco install --yes visualstudio2022community --package-parameters "--add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended --includeOptional" #choco install --yes visualstudio2022community --package-parameters "--allWorkloads --includeRecommended --includeOptional"
+          choco install --yes windows-sdk-10.0 windowsdriverkit10
+      - name: Install catch2
+        run: |
+          git clone https://github.com/catchorg/Catch2
+          cd Catch2 ; mkdir build ; cd build 
+          cmake -G "Visual Studio 17 2022" ..
+          cmake --build . --target install
+          cd ..
       - name: Build
         run: |
           make all PYENV=C:\hostedtoolcache\windows\Python\3.8.10\x64
-      - name: Run Tests
+      - name: Generate doxygen documentation
+        run: |
+          doxygen .\Doxyfile -w html
+      - name: run C catch2 doctests
+        run: |
+          cd testing
+          mkdir build && cd build
+          cmake ..
+          cmake --build .
+          .\Debug\custom-main-tests.exe
+      - name: Run Binding Tests
         run: |
           make all PYENV=C:\hostedtoolcache\windows\Python\3.8.10\x64
           python -c "from pwnlib.tubes import process; process.send()"

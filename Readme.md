@@ -52,6 +52,13 @@ Watch the swig doc for more informations.
 
 # II.3 Testing with integrated doxygen doctest
 
+```shell
+git clone https://github.com/catchorg/Catch2
+cd Catch2 ; mkdir build ; cd build 
+cmake -G "Visual Studio 16 2019" ..
+cmake --build . --target install
+```
+
 # alternatives:
 
  - [pwntools](https://github.com/Gallopsled/pwntools) : Works only on Linux. Not windows. No ability to upload in drivers.

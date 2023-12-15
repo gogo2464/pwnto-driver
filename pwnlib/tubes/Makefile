@@ -11,7 +11,8 @@ swig-all:
 	gcc -shared process.o process_wrap.o -o _process.pyd -L "$(PYENV)\libs" -l python3
 	
 clean:
-	@rm process.o
-	@rm process_wrap.o
-	@rm process.py
-	@rm _process.pyd
+	@del process.o
+	@del process_wrap.o
+	@del process_wrap.c
+	@del process.py
+	@del _process.pyd
