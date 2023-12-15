@@ -25,7 +25,7 @@ Tube *process(char *cmd)
 	 * @test
 	 * Tube * p = process("python");
 	 * p.send("print('Hello')\n");
-	 * //CHECK(p.recv(5) == "Hello");
+	 * CHECK(p.recv(5) == "Hello");
 	 */
 	
 	
