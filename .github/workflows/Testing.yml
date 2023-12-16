@@ -50,7 +50,7 @@ jobs:
       - name: Run Binding Tests
         run: |
           make all PYENV=C:\hostedtoolcache\windows\Python\3.8.10\x64
-          python -c "from pwnlib.tubes import process; process.send(5)"
+          python -c "from pwnlib.tubes import process; p = process.process('C:\hostedtoolcache\windows\Python\3.8.10\x64\python.exe'); process.pwnto_send('HEY!')"
       - name: Clean 
         run: make clean
         

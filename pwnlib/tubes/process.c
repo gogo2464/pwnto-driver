@@ -10,11 +10,9 @@
 
 #define TUBE_PTY 1
 
-Process proc;
+Process *proc;
 
-
-
-Tube *process(char *cmd)
+Process *process(char *cmd)
 {
 	/**
 	 * @brief open a file.
@@ -24,48 +22,83 @@ Tube *process(char *cmd)
 	 *
 	 * @test
 	 * Tube * p = process("python");
-	 * p.send("print('Hello')\n");
-	 * CHECK(p.recv(5) == "Hello");
+	 * p.pwnto_send("print('Hello')\n");
+	 * CHECK(p.pwnto_recv(5) == "Hello");
 	 */
 	
 	
 	#ifdef _WIN32
-		const char* processName = cmd;
-		
-		// Open the target process
-		
-		
-		STARTUPINFO info={sizeof(info)};
-		PROCESS_INFORMATION processInfo;
-		if (CreateProcess(NULL, cmd, NULL, NULL, TRUE, 0, NULL, NULL, &info, &processInfo))
-		{
-			WaitForSingleObject(processInfo.hProcess, INFINITE);
-			CloseHandle(processInfo.hProcess);
-			CloseHandle(processInfo.hThread);
-		}
+    HANDLE hStdInRead, hStdInWrite;
+    SECURITY_ATTRIBUTES saAttr = {sizeof(SECURITY_ATTRIBUTES), NULL, TRUE};
 
-		HANDLE hProcess = OpenProcess(PROCESS_ALL_ACCESS, FALSE, GetProcessId(processInfo.hProcess));
-		if (hProcess == NULL) {
-			printf("Failed to open process. Error %lu\n", GetLastError());
-			exit(-1);
-		}
+    // Create a pipe for the child process's stdin
+    if (!CreatePipe(&hStdInRead, &hStdInWrite, &saAttr, 0)) {
+        fprintf(stderr, "CreatePipe failed (%lu)\n", GetLastError());
+        exit(-1);
+    }
 
-		// Replace this with the target address you want to read
-		uintptr_t targetAddress = 0x00400000;
-		SIZE_T bytesRead;
-		char buffer[100];
+    // Ensure the write handle to the pipe for stdin is not inherited
+    SetHandleInformation(hStdInWrite, HANDLE_FLAG_INHERIT, 0);
 
-		// Read memory from the target process
-		if (ReadProcessMemory(hProcess, (LPCVOID)targetAddress, buffer, sizeof(buffer), &bytesRead)) {
-			printf("Read %lu bytes from target process:\n", bytesRead);
-			// Print or manipulate the data as needed
-			// ...
-		} else {
-			printf("Failed to read process memory. Error %lu\n", GetLastError());
-		}
+    PROCESS_INFORMATION piProcInfo;
+    STARTUPINFO siStartInfo;
 
-		// Close the process handle
-		CloseHandle(hProcess);
+    ZeroMemory(&piProcInfo, sizeof(PROCESS_INFORMATION));
+    ZeroMemory(&siStartInfo, sizeof(STARTUPINFO));
+
+    siStartInfo.cb = sizeof(STARTUPINFO);
+    siStartInfo.hStdInput = hStdInRead;
+    siStartInfo.hStdOutput = GetStdHandle(STD_OUTPUT_HANDLE); // Optionally redirect stdout
+    siStartInfo.hStdError = GetStdHandle(STD_ERROR_HANDLE);   // Optionally redirect stderr
+    siStartInfo.dwFlags |= STARTF_USESTDHANDLES;
+
+
+    if (!CreateProcess(
+            NULL,               // No module name (use command line)
+            cmd, // Replace with the actual child process command
+            NULL,               // Process handle not inheritable
+            NULL,               // Thread handle not inheritable
+            TRUE,               // Set handle inheritance to TRUE
+            0,                  // No creation flags
+            NULL,               // Use parent's environment block
+            NULL,               // Use parent's starting directory
+            &siStartInfo,       // Pointer to STARTUPINFO structure
+            &piProcInfo)) {     // Pointer to PROCESS_INFORMATION structure
+        fprintf(stderr, "CreateProcess failed (%lu)\n", GetLastError());
+        exit(-1);
+    }
+	
+	printf("debugging\n");
+	
+	
+	// Close the unused handles
+    /*CloseHandle(hStdInRead);
+    CloseHandle(hStdInWrite);
+	*/
+	
+	//Process *proc = malloc(sizeof(Process));
+	
+	
+	
+	
+	
+	
+	Process *new_proc = malloc(sizeof(Process));
+	new_proc->process_handle = piProcInfo;
+	new_proc->process_startup_info = siStartInfo;
+	
+	new_proc->pwnto_recv_ptr = pwnto_recv;
+	new_proc->pwnto_send = pwnto_send;
+	new_proc->pwnto_close = pwnto_close;
+	
+	proc = new_proc;
+	
+	
+	
+	printf("testing 0\n");
+	
+	return new_proc;
+	
     #elif __linux__
 
     int fdm, fds;
@@ -259,19 +292,21 @@ Tube *process(char *cmd)
     return NULL;
 }
 
-#define recv win_recv
-void *recv(int size) {
-	char *buff;
-	fgets(buff, sizeof(size), proc.process_PID);
+void *pwnto_recv(int size) {
+	printf("recv!");
 }
-#undef recv
 
-
-#define send win_send
-void send() {
-	printf("hey!");
+void pwnto_send(char *input) {
+    // Simulate sending input to the child process
+    //const char* inputData = "print('python has been done')";
+    DWORD bytesWritten;
+    WriteFile(proc->process_startup_info.hStdInput, input, strlen(input), &bytesWritten, NULL);
+	
+	
+	printf("testing\n");
+	
+	//printf("%s response got\n", bytesWritten);
 }
-#undef send
 
 void libs() {
 	
@@ -283,4 +318,13 @@ void libc() {
 
 void bin() {
 	
+}
+
+void pwnto_close() {
+    WaitForSingleObject(proc->process_handle.hProcess, INFINITE);
+    CloseHandle(proc->process_handle.hProcess);
+    CloseHandle(proc->process_handle.hThread);
+	
+	// Close the write handle to indicate the end of input
+    CloseHandle(proc->process_startup_info.hStdInput);
 }

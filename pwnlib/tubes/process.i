@@ -4,3 +4,4 @@
 %}
 
 %include "process.h"
+%include "tube.h"

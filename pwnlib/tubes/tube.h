@@ -1,4 +1,7 @@
 #include <sys/types.h>
+#ifdef _WIN32
+    #include <windows.h>
+#endif
 
 enum Tubetype
 {
@@ -16,10 +19,18 @@ typedef struct pidNode
 typedef struct Tube
 {
     char *buffer;
-    int fd_in;
-    int fd_out;
-    enum Tubetype type;
-    pidNode *pid_node;
+
+	#ifdef _WIN32
+	    PROCESS_INFORMATION process_handle;
+	    STARTUPINFO process_startup_info;
+    #elif __linux__
+	    int fd_in;
+        int fd_out;
+        enum Tubetype type;
+        pidNode *pid_node; 
+    #else
+        //printf("This code is compiled on an unknown operating system.\n");
+    #endif
 } Tube;
 
-void init_all();
+//void init_all();
