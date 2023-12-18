@@ -1,6 +1,6 @@
 %module process
 %{
-#include "process.h"
+#include "process.hpp"
 %}
 
-%include "process.h"
+%include "process.hpp"

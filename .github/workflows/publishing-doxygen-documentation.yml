@@ -1,0 +1,55 @@
+name: Testing
+
+on:
+  pull_request:
+    types:
+      - closed
+  push:
+    branches:
+      - master
+jobs:
+  publish-documentation-on-PR-merged:
+
+    runs-on: ubuntu-latest
+    
+    if: github.event.pull_request.merged == true
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Install dependencies
+        run: |
+          sudo apt install --yes doxygen
+          
+      - name: Generate doxygen documentation
+        run: |
+          doxygen .\Doxyfile -w html
+
+      - uses: DenverCoder1/doxygen-github-pages-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: html
+
+  publish-documentation-on-master-push:
+
+    runs-on: ubuntu-latest
+    
+    if: github.event.pull_request.base.ref == 'master'
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Install dependencies
+        run: |
+          sudo apt install --yes doxygen
+          
+      - name: Generate doxygen documentation
+        run: |
+          doxygen .\Doxyfile -w html
+
+      - uses: DenverCoder1/doxygen-github-pages-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
+          folder: html
