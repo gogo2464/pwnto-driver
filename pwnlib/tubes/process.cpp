@@ -6,13 +6,11 @@
 #include <stdlib.h>
 #include <fcntl.h>
 	   
-#include "process.h"
+#include "process.hpp"
 
 #define TUBE_PTY 1
 
-Process *proc;
-
-Process *process(char *cmd)
+Process::Process(char *cmd)
 {
 	/**
 	 * @brief open a file.
@@ -83,21 +81,10 @@ Process *process(char *cmd)
 	
 	
 	
-	Process *new_proc = malloc(sizeof(Process));
-	new_proc->process_handle = piProcInfo;
-	new_proc->process_startup_info = siStartInfo;
-	
-	new_proc->pwnto_recv_ptr = pwnto_recv;
-	new_proc->pwnto_send = pwnto_send;
-	new_proc->pwnto_close = pwnto_close;
-	
-	proc = new_proc;
+	this->process_handle = piProcInfo;
+	this->process_startup_info = siStartInfo;
 	
 	
-	
-	printf("testing 0\n");
-	
-	return new_proc;
 	
     #elif __linux__
 
@@ -289,18 +276,19 @@ Process *process(char *cmd)
         printf("This code is compiled on an unknown operating system.\n");
     #endif
 	
-    return NULL;
+    //return NULL;
 }
 
-void *pwnto_recv(int size) {
+void * Process::recv(int size) {
 	printf("recv!");
+	return (void*) "abc";
 }
 
-void pwnto_send(char *input) {
+void Process::send(void *input) {
     // Simulate sending input to the child process
     //const char* inputData = "print('python has been done')";
     DWORD bytesWritten;
-    WriteFile(proc->process_startup_info.hStdInput, input, strlen(input), &bytesWritten, NULL);
+    WriteFile(this->process_startup_info.hStdInput, input, strlen((char *)input), &bytesWritten, NULL);
 	
 	
 	printf("testing\n");
@@ -308,23 +296,23 @@ void pwnto_send(char *input) {
 	//printf("%s response got\n", bytesWritten);
 }
 
-void libs() {
+void Process::libs() {
 	
 }
 
-void libc() {
+void Process::libc() {
 	
 }
 
-void bin() {
+void Process::bin() {
 	
 }
 
-void pwnto_close() {
-    WaitForSingleObject(proc->process_handle.hProcess, INFINITE);
-    CloseHandle(proc->process_handle.hProcess);
-    CloseHandle(proc->process_handle.hThread);
+void Process::close() {
+    WaitForSingleObject(this->process_handle.hProcess, INFINITE);
+    CloseHandle(this->process_handle.hProcess);
+    CloseHandle(this->process_handle.hThread);
 	
 	// Close the write handle to indicate the end of input
-    CloseHandle(proc->process_startup_info.hStdInput);
+    CloseHandle(this->process_startup_info.hStdInput);
 }

@@ -22,7 +22,30 @@ jobs:
       
       - name: Install dependencies
         run: |
-          choco install --yes swig
+          choco install nuget.commandline --yes
+          nuget install Bison -Version 3.7.4 -OutputDirectory C:\Tools\bison
+          nuget install PCRE2 -Version 10.39 -OutputDirectory C:\Tools\pcre2
+          
+          git clone https://github.com/swig/swig/ --branch vadz:C
+          cd swig
+          
+          $env:PATH="C:\Tools\CMake\CMake-win64.3.15.5\bin;C:\Tools\bison\Bison.3.7.4\bin;" + $env:PATH
+          $PCRE_ROOT="C:\Tools\pcre2\PCRE2.10.39.0"
+          $PCRE_PLATFORM="x64"
+          $WORKING_DIR=(Get-Location).ToString() -replace "\\","/"
+          cmake -G "Visual Studio 17 2022" -A "x64" `
+          -DCMAKE_INSTALL_PREFIX="$WORKING_DIR/install2" `
+          -DCMAKE_C_FLAGS="/DPCRE2_STATIC" `
+          -DCMAKE_CXX_FLAGS="/DPCRE2_STATIC" `
+          -DPCRE2_INCLUDE_DIR="$PCRE_ROOT/include" `
+          -DPCRE2_LIBRARY="$PCRE_ROOT/lib/pcre2-8-static.lib" `
+          -S . -B build
+          cmake --build build --config Release
+          cmake --install build --config Release
+          
+          
+          cd ..
+          #choco install --yes swig
           choco install --yes doxygen.install
           choco install --yes doxygen.portable
           choco install --yes visualstudio2022community --package-parameters "--add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended --includeOptional" #choco install --yes visualstudio2022community --package-parameters "--allWorkloads --includeRecommended --includeOptional"
