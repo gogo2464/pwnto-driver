@@ -1,0 +1,45 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.9.34701.34
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "pwnto-driver", "pwnto-driver.vcxproj", "{C8628B05-77CE-4990-BBED-98AB442660EA}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ExampleComPort", "example\ExampleComPort\ExampleComPort.vcxproj", "{DDA1AD84-9722-4291-8876-AA221D6C255D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C8628B05-77CE-4990-BBED-98AB442660EA}.Debug|x64.ActiveCfg = Debug|x64
+		{C8628B05-77CE-4990-BBED-98AB442660EA}.Debug|x64.Build.0 = Debug|x64
+		{C8628B05-77CE-4990-BBED-98AB442660EA}.Debug|x64.Deploy.0 = Debug|x64
+		{C8628B05-77CE-4990-BBED-98AB442660EA}.Debug|x86.ActiveCfg = Debug|x64
+		{C8628B05-77CE-4990-BBED-98AB442660EA}.Debug|x86.Build.0 = Debug|x64
+		{C8628B05-77CE-4990-BBED-98AB442660EA}.Debug|x86.Deploy.0 = Debug|x64
+		{C8628B05-77CE-4990-BBED-98AB442660EA}.Release|x64.ActiveCfg = Release|x64
+		{C8628B05-77CE-4990-BBED-98AB442660EA}.Release|x64.Build.0 = Release|x64
+		{C8628B05-77CE-4990-BBED-98AB442660EA}.Release|x64.Deploy.0 = Release|x64
+		{C8628B05-77CE-4990-BBED-98AB442660EA}.Release|x86.ActiveCfg = Release|x64
+		{C8628B05-77CE-4990-BBED-98AB442660EA}.Release|x86.Build.0 = Release|x64
+		{C8628B05-77CE-4990-BBED-98AB442660EA}.Release|x86.Deploy.0 = Release|x64
+		{DDA1AD84-9722-4291-8876-AA221D6C255D}.Debug|x64.ActiveCfg = Debug|x64
+		{DDA1AD84-9722-4291-8876-AA221D6C255D}.Debug|x64.Build.0 = Debug|x64
+		{DDA1AD84-9722-4291-8876-AA221D6C255D}.Debug|x86.ActiveCfg = Debug|Win32
+		{DDA1AD84-9722-4291-8876-AA221D6C255D}.Debug|x86.Build.0 = Debug|Win32
+		{DDA1AD84-9722-4291-8876-AA221D6C255D}.Release|x64.ActiveCfg = Release|x64
+		{DDA1AD84-9722-4291-8876-AA221D6C255D}.Release|x64.Build.0 = Release|x64
+		{DDA1AD84-9722-4291-8876-AA221D6C255D}.Release|x86.ActiveCfg = Release|Win32
+		{DDA1AD84-9722-4291-8876-AA221D6C255D}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EAB24B73-1A48-4806-B648-89B42318718A}
+	EndGlobalSection
+EndGlobal
