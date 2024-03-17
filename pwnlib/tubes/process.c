@@ -19,8 +19,8 @@ void process(char *command) {
 	
 	printf("hello\n");
 }
-
- char *recv(int size) {
+/*
+char *recv(int size) {
 	char *buff;
 	fgets(buff, sizeof(size), proc.process_PID);
 	return buff;
@@ -29,7 +29,7 @@ void process(char *command) {
 void send() {
 	printf("hey!");
 }
-
+*/
 void libs() {
 	
 }
