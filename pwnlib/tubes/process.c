@@ -4,7 +4,7 @@
 
 Process proc;
 
-void process (char *command) {
+void process(char *command) {
 	/**
 	 * @brief open a file.
 	 *
@@ -20,12 +20,13 @@ void process (char *command) {
 	printf("hello\n");
 }
 
-void recv(int size) {
+ char *recv(int size) {
 	char *buff;
 	fgets(buff, sizeof(size), proc.process_PID);
+	return buff;
 }
 
-void send () {
+void send() {
 	printf("hey!");
 }
 

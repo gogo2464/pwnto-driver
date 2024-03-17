@@ -29,7 +29,7 @@ jobs:
       - name: Run Tests
         run: |
           make all PYENV=C:\hostedtoolcache\windows\Python\3.8.10\x64
-          python -c "from pwnlib.tubes import process; process.send()"
+          python -c "from pwnlib.tubes.process import Process; p = Process('a');"
       - name: Clean 
         run: make clean
         
