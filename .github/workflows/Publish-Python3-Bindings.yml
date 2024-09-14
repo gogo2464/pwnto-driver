@@ -51,7 +51,7 @@ jobs:
           cd ..
           choco install --yes doxygen.install
           choco install --yes doxygen.portable
-          choco install --yes visualstudio2022community --package-parameters "--add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended # --includeOptional" ##choco install --yes visualstudio2022community --package-parameters "--allWorkloads --includeRecommended --includeOptional"
+          choco install --yes visualstudio2022community --package-parameters "--add Microsoft.VisualStudio.Workload.NativeDesktop" # "--allWorkloads"
           choco install --yes windows-sdk-10.0 windowsdriverkit10
       - name: Install catch2
         run: |
