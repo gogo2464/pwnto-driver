@@ -4,7 +4,7 @@
 
 class Process {
     public:
-        Process();
+        Process(std::string fileToOpen);
         ~Process();
         void recv(int size);
         void send();

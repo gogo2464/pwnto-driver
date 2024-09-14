@@ -5,7 +5,7 @@
 #include "process.hpp"
 
 
-Process::Process() {
+Process::Process(std::string fileToOpen) {
 	/**
 	* @brief open a file.
 	*
@@ -43,11 +43,3 @@ void Process::libc() {
 void Process::bin() {
 
 }
-
-/*
-void recv(int size) {
-	char *buff;
-	fgets(buff, sizeof(size), proc.process_PID);
-}
-
-*/
