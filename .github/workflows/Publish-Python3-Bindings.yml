@@ -22,6 +22,8 @@ jobs:
       
       - name: Install dependencies
         run: |
+          dir C:\hostedtoolcache\windows\Python\3.12.6
+
           choco install nuget.commandline --yes
           nuget install Bison -Version 3.7.4 -OutputDirectory C:\Tools\bison
           nuget install PCRE2 -Version 10.39 -OutputDirectory C:\Tools\pcre2
@@ -60,12 +62,12 @@ jobs:
           cd ..
       - name: Build
         run: |
-          make all PYENV=C:\hostedtoolcache\windows\Python\3.12.1\x64
+          make all PYENV=C:\hostedtoolcache\windows\Python\3.12.6\x64
 
       - name: Run Binding Tests
         run: |
-          make all PYENV=C:\hostedtoolcache\windows\Python\3.12.1\x64
-          python -c "from pwnlib.tubes.process import Process; p = Process('C:\hostedtoolcache\windows\Python\3.12.1\x64\python.exe'); p.recv(123)"
+          make all PYENV=C:\hostedtoolcache\windows\Python\3.12.6\x64
+          python -c "from pwnlib.tubes.process import Process; p = Process('C:\hostedtoolcache\windows\Python\3.12.6\x64\python.exe'); p.recv(123)"
       - name: Clean 
         run: make clean
 
