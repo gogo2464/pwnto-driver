@@ -7,9 +7,9 @@
 
 Process::Process(std::string fileToOpen) {
 	/**
-	* @brief open a file.
+	* @brief open a file to debug it.
 	*
-	* @param file , the file to execute.
+	* @param fileToOpen , the file to execute.
 	* @return Nothing.
 	*
 	* @test
