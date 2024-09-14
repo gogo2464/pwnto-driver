@@ -81,13 +81,18 @@ jobs:
 
       - name: Generate doxygen documentation
         run: |
-          doxygen .\Doxyfile -w html -g .\Doxyfile
+          mkdir docs 
+          cd docs
+          doxygen ..\Doxyfile -w html -g .\Doxyfile
+          cd ..
 
-          - name: Deploy to GitHub Pages
-          uses: peaceiris/actions-gh-pages@v3
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: ./html
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/html/
+          keep_files: true
+          allow_empty_commit: true
 
 
 
