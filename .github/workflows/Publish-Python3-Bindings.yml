@@ -70,9 +70,6 @@ jobs:
       - name: Clean 
         run: make clean
 
-      - name: Generate doxygen documentation
-        run: |
-          doxygen .\Doxyfile -w html -g .\Doxyfile
       - name: run C catch2 doctests
         run: |
           cd testing
@@ -80,6 +77,19 @@ jobs:
           cmake ..
           cmake --build .
           .\Debug\tests.exe
+          cd ..
+
+      - name: Generate doxygen documentation
+        run: |
+          doxygen .\Doxyfile -w html -g .\Doxyfile
+
+          - name: Deploy to GitHub Pages
+          uses: peaceiris/actions-gh-pages@v3
+          with:
+            github_token: ${{ secrets.GITHUB_TOKEN }}
+            publish_dir: ./html
+
+
 
   ubuntu-testing:
     
