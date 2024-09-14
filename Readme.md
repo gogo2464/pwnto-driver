@@ -51,6 +51,8 @@ Watch the swig doc for more informations.
 
 # II.2 Documentating with doxygen
 
+The doxygen documentation is available [there](https://gogo2464.github.io/pwnto-driver/).
+
 # II.3 Testing with integrated doxygen doctest
 
 # alternatives:
