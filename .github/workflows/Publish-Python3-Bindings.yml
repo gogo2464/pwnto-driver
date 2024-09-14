@@ -1,0 +1,89 @@
+name: Publish
+
+on:
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - '*'
+  pull_request:
+
+jobs:
+  windows-testing:
+
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.12' 
+      
+      - name: Install dependencies
+        run: |
+          choco install nuget.commandline --yes
+          nuget install Bison -Version 3.7.4 -OutputDirectory C:\Tools\bison
+          nuget install PCRE2 -Version 10.39 -OutputDirectory C:\Tools\pcre2
+          
+          git clone https://github.com/swig/swig/
+          cd swig
+          mkdir C:\install\swig
+          
+          $env:PATH="C:\Tools\CMake\CMake-win64.3.15.5\bin;C:\Tools\bison\Bison.3.7.4\bin;" + $env:PATH
+          $PCRE_ROOT="C:\Tools\pcre2\PCRE2.10.39.0"
+          $PCRE_PLATFORM="x64"
+          $WORKING_DIR=(Get-Location).ToString() -replace "\\","/"
+          cmake -G "Visual Studio 17 2022" -A "x64" `
+          -DCMAKE_INSTALL_PREFIX="C:\install\swig" `
+          -DCMAKE_C_FLAGS="/DPCRE2_STATIC" `
+          -DCMAKE_CXX_FLAGS="/DPCRE2_STATIC" `
+          -DPCRE2_INCLUDE_DIR="$PCRE_ROOT/include" `
+          -DPCRE2_LIBRARY="$PCRE_ROOT/lib/pcre2-8-static.lib" `
+          -S . -B build
+          cmake --build build --config Release
+          cmake --install build --config Release
+          
+          $env:Path += "C:\install\swig"
+          
+          cd ..
+          choco install --yes doxygen.install
+          choco install --yes doxygen.portable
+          choco install --yes visualstudio2022community --package-parameters "--add Microsoft.VisualStudio.Workload.NativeDesktop --includeRecommended --includeOptional" #choco install --yes visualstudio2022community --package-parameters "--allWorkloads --includeRecommended --includeOptional"
+          choco install --yes windows-sdk-10.0 windowsdriverkit10
+      - name: Install catch2
+        run: |
+          git clone https://github.com/catchorg/Catch2
+          cd Catch2 ; mkdir build ; cd build 
+          cmake -G "Visual Studio 17 2022" ..
+          cmake --build . --target install
+          cd ..
+      - name: Build
+        run: |
+          make all PYENV=C:\hostedtoolcache\windows\Python\3.12.1\x64
+      - name: Generate doxygen documentation
+        run: |
+          doxygen .\Doxyfile -w html
+      - name: run C catch2 doctests
+        run: |
+          cd testing
+          mkdir build && cd build
+          cmake ..
+          cmake --build .
+          .\Debug\custom-main-tests.exe
+      - name: Run Binding Tests
+        run: |
+          make all PYENV=C:\hostedtoolcache\windows\Python\3.12.1\x64
+          python -c "from pwnlib.tubes.process import Process; p = Process('C:\hostedtoolcache\windows\Python\3.12.1\x64\python.exe'); p.recv(123)"
+      - name: Clean 
+        run: make clean
+        
+  ubuntu-testing:
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Build
+        run: echo "hello world"

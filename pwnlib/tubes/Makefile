@@ -5,10 +5,10 @@ INC=-I include/
 all: swig-all
 
 swig-all:
-	swig -python process.i
-	gcc -O2 -fPIC -c process.c
-	gcc -O2 -fPIC -c process_wrap.c -I"$(PYENV)\include"
-	gcc -shared process.o process_wrap.o -o _process.pyd -L "$(PYENV)\libs" -l python3
+	swig -c++ -python process.i
+	clang++ -O2 -shared -c process.cpp
+	clang++ -O2 -shared -c process_wrap.cxx -I"$(PYENV)\include"
+	clang++ -shared process.o process_wrap.o -o _process.pyd -L "$(PYENV)\libs" -l python3
 	
 clean:
 	@rm process.o

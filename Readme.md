@@ -13,16 +13,17 @@ As the dev have some experience with the old pwntools, the new tool aims to fix 
 # I.1 Install building dependencies
 
 ```
-choco install --yes python --version 3.8.0
+choco install --yes python --version 3.13.0-rc2
 choco install --yes swig
+choco install --yes llvm
 ```
 
 # I.2 Build/Clean project
 
-In order to build pwnto-driver including swig bindings, you must specify your python path. For example, if you installed python 3 with the command `choco install --yes python --version 3.8.0`, the you could build with:
+In order to build pwnto-driver including swig bindings, you must specify your python path. For example, if you installed python 3 with the command `choco install --yes python --version 3.13.0-rc2`, the you could build with:
 
 ```shell
-make all PYENV=C:\Python38
+make all PYENV=C:\Python313
 ```
 clean with
 
