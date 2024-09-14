@@ -61,9 +61,17 @@ jobs:
       - name: Build
         run: |
           make all PYENV=C:\hostedtoolcache\windows\Python\3.12.1\x64
+
+      - name: Run Binding Tests
+        run: |
+          make all PYENV=C:\hostedtoolcache\windows\Python\3.12.1\x64
+          python -c "from pwnlib.tubes.process import Process; p = Process('C:\hostedtoolcache\windows\Python\3.12.1\x64\python.exe'); p.recv(123)"
+      - name: Clean 
+        run: make clean
+
       - name: Generate doxygen documentation
         run: |
-          doxygen .\Doxyfile -w html
+          doxygen .\Doxyfile -w html -g .\Doxyfile
       - name: run C catch2 doctests
         run: |
           cd testing
@@ -71,13 +79,7 @@ jobs:
           cmake ..
           cmake --build .
           .\Debug\custom-main-tests.exe
-      - name: Run Binding Tests
-        run: |
-          make all PYENV=C:\hostedtoolcache\windows\Python\3.12.1\x64
-          python -c "from pwnlib.tubes.process import Process; p = Process('C:\hostedtoolcache\windows\Python\3.12.1\x64\python.exe'); p.recv(123)"
-      - name: Clean 
-        run: make clean
-        
+
   ubuntu-testing:
     
     runs-on: ubuntu-latest
